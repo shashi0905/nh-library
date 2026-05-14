@@ -1,0 +1,11 @@
+# Global owner — required reviewer on every PR
+* @shashi0905
+
+# Backend
+/backend/ @shashi0905
+
+# Frontend
+/frontend/ @shashi0905
+
+# CI/CD
+/.github/ @shashi0905
