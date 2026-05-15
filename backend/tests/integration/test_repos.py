@@ -1,7 +1,7 @@
 """Integration tests for repository CRUD against a real PostgreSQL container."""
 
+import datetime as dt
 import uuid
-from datetime import datetime, timedelta
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -94,10 +94,10 @@ async def test_loan_create_and_list(session: AsyncSession) -> None:
             "id": uuid.uuid4(),
             "book_id": book.id,
             "member_id": member.id,
-            "due_date": datetime.now(datetime.UTC) + timedelta(days=14),
+            "due_date": dt.datetime.now(dt.UTC) + dt.timedelta(days=14),
         }
     )
-    loans = await loan_repo.list(filters={"member_id": member.id})
+    loans = await loan_repo.get_many(filters={"member_id": member.id})
     assert any(loan_item.id == loan.id for loan_item in loans)
 
 
@@ -119,12 +119,12 @@ async def test_loan_status_update(session: AsyncSession) -> None:
             "id": uuid.uuid4(),
             "book_id": book.id,
             "member_id": member.id,
-            "due_date": datetime.now(datetime.UTC) + timedelta(days=14),
+            "due_date": dt.datetime.now(dt.UTC) + dt.timedelta(days=14),
         }
     )
     updated = await loan_repo.update(
         loan.id,
-        {"status": LoanStatus.RETURNED, "returned_at": datetime.now(datetime.UTC)},
+        {"status": LoanStatus.RETURNED, "returned_at": dt.datetime.now(dt.UTC)},
     )
     assert updated is not None
     assert updated.status == LoanStatus.RETURNED

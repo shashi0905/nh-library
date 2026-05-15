@@ -5,6 +5,7 @@ pytest-cov==6.1.0
 pytest-env==1.1.5
 httpx==0.28.1
 testcontainers[postgres]==4.10.0
+docker==7.1.0
 ruff==0.11.9
 black==25.1.0
 mypy==1.15.0

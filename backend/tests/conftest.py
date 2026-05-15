@@ -1,6 +1,5 @@
 """Shared pytest fixtures for unit and integration tests."""
 
-import asyncio
 from collections.abc import AsyncGenerator, Generator
 
 import app.db.models  # noqa: F401
@@ -18,25 +17,22 @@ from app.db.base import Base
 
 
 @pytest.fixture(scope="session")
-def event_loop() -> Generator[asyncio.AbstractEventLoop, None, None]:
-    """Single event loop for the entire test session."""
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
-
-
-@pytest.fixture(scope="session")
 def pg_container() -> Generator[PostgresContainer, None, None]:
-    """Spin up a postgres:16-alpine container for the test session."""
+    """Spin up a postgres:16-alpine container once for the test session."""
     with PostgresContainer("postgres:16-alpine") as pg:
         yield pg
 
 
-@pytest_asyncio.fixture(scope="session")
-async def db_engine(pg_container: PostgresContainer) -> AsyncGenerator[AsyncEngine, None]:
-    """Create async engine pointed at the test container and run migrations."""
-    url = pg_container.get_connection_url().replace("psycopg2", "asyncpg")
-    engine = create_async_engine(url)
+@pytest.fixture(scope="session")
+def db_url(pg_container: PostgresContainer) -> str:
+    """Return the asyncpg connection URL for the test container."""
+    return pg_container.get_connection_url().replace("psycopg2", "asyncpg")
+
+
+@pytest_asyncio.fixture
+async def db_engine(db_url: str) -> AsyncGenerator[AsyncEngine, None]:
+    """Create a fresh async engine per test and apply schema."""
+    engine = create_async_engine(db_url)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield engine
@@ -47,7 +43,7 @@ async def db_engine(pg_container: PostgresContainer) -> AsyncGenerator[AsyncEngi
 
 @pytest_asyncio.fixture
 async def session(db_engine: AsyncEngine) -> AsyncGenerator[AsyncSession, None]:
-    """Yield a session that rolls back after each test for isolation."""
+    """Yield a transactional session that rolls back after each test."""
     factory = async_sessionmaker(db_engine, expire_on_commit=False)
     async with factory() as sess, sess.begin():
         yield sess
