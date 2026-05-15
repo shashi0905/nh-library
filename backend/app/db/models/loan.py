@@ -37,10 +37,15 @@ class Loan(Base):
     due_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     returned_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     status: Mapped[LoanStatus] = mapped_column(
-        Enum(LoanStatus, name="loanstatus"), nullable=False, default=LoanStatus.ACTIVE
+        Enum(LoanStatus, name="loanstatus"),
+        nullable=False,
+        default=LoanStatus.ACTIVE,
+        server_default="ACTIVE",
     )
     fine_amount: Mapped[float | None] = mapped_column(Numeric(10, 2), nullable=True)
-    fine_paid: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    fine_paid: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
 
     __table_args__ = (
         Index("ix_loans_member_status", "member_id", "status"),

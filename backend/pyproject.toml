@@ -39,6 +39,10 @@ ignore_missing_imports = true
 asyncio_mode = "auto"
 testpaths = ["tests"]
 addopts = "-q --tb=short"
+env = [
+    "SECRET_KEY=test-secret-key-not-for-production",
+    "DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/library",
+]
 
 # ── Coverage ──────────────────────────────────────────────────────────────────
 [tool.coverage.run]

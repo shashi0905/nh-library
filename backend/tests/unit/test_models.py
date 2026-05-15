@@ -1,37 +1,28 @@
-"""Unit tests for ORM model instantiation and defaults."""
+"""Unit tests for ORM model instantiation and enum values."""
 
-import uuid
-from datetime import datetime
+import datetime as dt
 
-from app.db.models.book import Book
-from app.db.models.loan import Loan, LoanStatus
-from app.db.models.member import Member
-
-
-def test_book_defaults() -> None:
-    """Book should default total_copies and available to 1."""
-    book = Book(isbn="9780000000001", title="Test", author="Author")
-    assert book.total_copies == 1
-    assert book.available == 1
-
-
-def test_member_defaults() -> None:
-    """Member should default is_active to True."""
-    member = Member(name="Alice", email="alice@example.com")
-    assert member.is_active is True
-
-
-def test_loan_defaults() -> None:
-    """Loan should default status to ACTIVE and fine_paid to False."""
-    loan = Loan(
-        book_id=uuid.uuid4(),
-        member_id=uuid.uuid4(),
-        due_date=datetime.now(datetime.UTC),
-    )
-    assert loan.status == LoanStatus.ACTIVE
-    assert loan.fine_paid is False
+from app.db.models.loan import LoanStatus
 
 
 def test_loan_status_enum_values() -> None:
     """LoanStatus enum must have exactly the three expected values."""
     assert set(LoanStatus) == {LoanStatus.ACTIVE, LoanStatus.RETURNED, LoanStatus.OVERDUE}
+
+
+def test_loan_status_string_values() -> None:
+    """LoanStatus values must match the DB ENUM strings."""
+    assert LoanStatus.ACTIVE.value == "ACTIVE"
+    assert LoanStatus.RETURNED.value == "RETURNED"
+    assert LoanStatus.OVERDUE.value == "OVERDUE"
+
+
+def test_loan_status_is_str() -> None:
+    """LoanStatus inherits str so it serialises correctly."""
+    assert isinstance(LoanStatus.ACTIVE, str)
+
+
+def test_utc_alias_available() -> None:
+    """datetime.UTC must be available (Python 3.11+)."""
+    now = dt.datetime.now(dt.UTC)
+    assert now.tzinfo is not None

@@ -18,8 +18,10 @@ class Book(Base):
     isbn: Mapped[str] = mapped_column(String(13), unique=True, nullable=False, index=True)
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     author: Mapped[str] = mapped_column(String(255), nullable=False)
-    total_copies: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
-    available: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    total_copies: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=1, server_default="1"
+    )
+    available: Mapped[int] = mapped_column(Integer, nullable=False, default=1, server_default="1")
     # Populated by a DB trigger; not written by the ORM directly.
     search_vector: Mapped[str | None] = mapped_column(TSVECTOR, nullable=True)
 
