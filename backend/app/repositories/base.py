@@ -1,5 +1,7 @@
 """Abstract repository interface."""
 
+from __future__ import annotations
+
 import uuid
 from abc import ABC, abstractmethod
 from typing import Any, Generic, TypeVar
@@ -16,7 +18,7 @@ class IRepository(ABC, Generic[T]):
         ...
 
     @abstractmethod
-    async def list(
+    async def get_many(
         self,
         filters: dict[str, Any] | None = None,
         cursor: uuid.UUID | None = None,

@@ -1,5 +1,7 @@
 """Book repository — SQLAlchemy async implementation."""
 
+from __future__ import annotations
+
 import uuid
 from typing import Any
 
@@ -25,7 +27,7 @@ class BookRepository(IRepository[Book]):
         result = await self._session.execute(select(Book).where(Book.isbn == isbn))
         return result.scalar_one_or_none()
 
-    async def list(
+    async def get_many(
         self,
         filters: dict[str, Any] | None = None,
         cursor: uuid.UUID | None = None,
@@ -38,9 +40,7 @@ class BookRepository(IRepository[Book]):
                 stmt = stmt.where(Book.available > 0)
             if q := filters.get("q"):
                 stmt = stmt.where(
-                    Book.search_vector.op("@@")(
-                        Book.search_vector.op("to_tsquery")(q)  # type: ignore[attr-defined]
-                    )
+                    Book.search_vector.op("@@")(Book.search_vector.op("plainto_tsquery")(q))
                 )
         if cursor:
             stmt = stmt.where(Book.id > cursor)
@@ -52,11 +52,7 @@ class BookRepository(IRepository[Book]):
         """Full-text search on title + author via tsvector."""
         stmt = (
             select(Book)
-            .where(
-                Book.search_vector.op("@@")(  # type: ignore[attr-defined]
-                    Book.search_vector.op("plainto_tsquery")(query)
-                )
-            )
+            .where(Book.search_vector.op("@@")(Book.search_vector.op("plainto_tsquery")(query)))
             .limit(limit)
         )
         result = await self._session.execute(stmt)

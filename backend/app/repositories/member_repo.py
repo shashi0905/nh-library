@@ -25,7 +25,7 @@ class MemberRepository(IRepository[Member]):
         result = await self._session.execute(select(Member).where(Member.email == email))
         return result.scalar_one_or_none()
 
-    async def list(
+    async def get_many(
         self,
         filters: dict[str, Any] | None = None,
         cursor: uuid.UUID | None = None,

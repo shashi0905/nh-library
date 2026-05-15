@@ -1,7 +1,7 @@
 """SQLAlchemy async engine, session factory, and declarative base."""
 
+import datetime as dt
 from collections.abc import AsyncGenerator
-from datetime import datetime
 
 from sqlalchemy import DateTime, func  # noqa: E402
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -31,14 +31,14 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 class Base(DeclarativeBase):
     """Shared declarative base with audit timestamps."""
 
-    created_at: Mapped[datetime] = mapped_column(
+    created_at: Mapped[dt.datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
     )
-    updated_at: Mapped[datetime] = mapped_column(
+    updated_at: Mapped[dt.datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
-        onupdate=lambda: datetime.now(datetime.UTC),
+        onupdate=lambda: dt.datetime.now(dt.UTC),
         nullable=False,
     )

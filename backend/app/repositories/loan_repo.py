@@ -1,7 +1,9 @@
 """Loan repository — SQLAlchemy async implementation."""
 
+from __future__ import annotations
+
+import datetime as dt
 import uuid
-from datetime import datetime
 from typing import Any
 
 from sqlalchemy import select
@@ -21,7 +23,7 @@ class LoanRepository(IRepository[Loan]):
         """Return Loan by primary key."""
         return await self._session.get(Loan, id)
 
-    async def list(
+    async def get_many(
         self,
         filters: dict[str, Any] | None = None,
         cursor: uuid.UUID | None = None,
@@ -37,7 +39,7 @@ class LoanRepository(IRepository[Loan]):
             if filters.get("overdue"):
                 stmt = stmt.where(
                     Loan.status == LoanStatus.ACTIVE,
-                    Loan.due_date < datetime.now(datetime.UTC),
+                    Loan.due_date < dt.datetime.now(dt.UTC),
                 )
         if cursor:
             stmt = stmt.where(Loan.id > cursor)
@@ -49,7 +51,7 @@ class LoanRepository(IRepository[Loan]):
         """Return all ACTIVE loans past their due date (for overdue task)."""
         stmt = select(Loan).where(
             Loan.status == LoanStatus.ACTIVE,
-            Loan.due_date < datetime.now(datetime.UTC),
+            Loan.due_date < dt.datetime.now(dt.UTC),
         )
         result = await self._session.execute(stmt)
         return list(result.scalars().all())
