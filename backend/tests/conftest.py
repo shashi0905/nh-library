@@ -3,6 +3,7 @@
 import asyncio
 from collections.abc import AsyncGenerator, Generator
 
+import app.db.models  # noqa: F401
 import pytest
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import (
@@ -13,7 +14,6 @@ from sqlalchemy.ext.asyncio import (
 )
 from testcontainers.postgres import PostgresContainer
 
-import app.db.models  # noqa: F401
 from app.db.base import Base
 
 
