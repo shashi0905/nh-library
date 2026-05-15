@@ -1,7 +1,7 @@
 """SQLAlchemy async engine, session factory, and declarative base."""
 
 from collections.abc import AsyncGenerator
-from datetime import datetime, timezone
+from datetime import datetime
 
 from sqlalchemy import DateTime, func
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -40,6 +40,6 @@ class Base(DeclarativeBase):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
-        onupdate=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(datetime.UTC),
         nullable=False,
     )

@@ -1,6 +1,6 @@
 """Loan repository — SQLAlchemy async implementation."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any
 import uuid
 
@@ -37,7 +37,7 @@ class LoanRepository(IRepository[Loan]):
             if filters.get("overdue"):
                 stmt = stmt.where(
                     Loan.status == LoanStatus.ACTIVE,
-                    Loan.due_date < datetime.now(timezone.utc),
+                    Loan.due_date < datetime.now(datetime.UTC),
                 )
         if cursor:
             stmt = stmt.where(Loan.id > cursor)
@@ -49,7 +49,7 @@ class LoanRepository(IRepository[Loan]):
         """Return all ACTIVE loans past their due date (for overdue task)."""
         stmt = select(Loan).where(
             Loan.status == LoanStatus.ACTIVE,
-            Loan.due_date < datetime.now(timezone.utc),
+            Loan.due_date < datetime.now(datetime.UTC),
         )
         result = await self._session.execute(stmt)
         return list(result.scalars().all())

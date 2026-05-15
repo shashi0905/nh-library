@@ -1,7 +1,7 @@
 """Unit tests for ORM model instantiation and defaults."""
 
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 
 from app.db.models.book import Book
 from app.db.models.loan import Loan, LoanStatus
@@ -26,7 +26,7 @@ def test_loan_defaults() -> None:
     loan = Loan(
         book_id=uuid.uuid4(),
         member_id=uuid.uuid4(),
-        due_date=datetime.now(timezone.utc),
+        due_date=datetime.now(datetime.UTC),
     )
     assert loan.status == LoanStatus.ACTIVE
     assert loan.fine_paid is False
