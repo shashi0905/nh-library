@@ -1,8 +1,8 @@
 """Abstract repository interface."""
 
+import uuid
 from abc import ABC, abstractmethod
 from typing import Any, Generic, TypeVar
-import uuid
 
 T = TypeVar("T")
 

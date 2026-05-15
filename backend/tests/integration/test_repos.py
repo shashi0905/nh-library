@@ -59,9 +59,7 @@ async def test_book_get_not_found(session: AsyncSession) -> None:
 async def test_member_create_and_get_by_email(session: AsyncSession) -> None:
     """Member should be findable by email after creation."""
     repo = MemberRepository(session)
-    member = await repo.create(
-        {"id": uuid.uuid4(), "name": "Alice", "email": "alice@example.com"}
-    )
+    member = await repo.create({"id": uuid.uuid4(), "name": "Alice", "email": "alice@example.com"})
     found = await repo.get_by_email("alice@example.com")
     assert found is not None
     assert found.id == member.id
@@ -71,9 +69,7 @@ async def test_member_create_and_get_by_email(session: AsyncSession) -> None:
 async def test_member_soft_delete(session: AsyncSession) -> None:
     """Deleting a member should set is_active=False, not remove the row."""
     repo = MemberRepository(session)
-    member = await repo.create(
-        {"id": uuid.uuid4(), "name": "Bob", "email": "bob@example.com"}
-    )
+    member = await repo.create({"id": uuid.uuid4(), "name": "Bob", "email": "bob@example.com"})
     await repo.delete(member.id)
     fetched = await repo.get(member.id)
     assert fetched is not None
@@ -102,7 +98,7 @@ async def test_loan_create_and_list(session: AsyncSession) -> None:
         }
     )
     loans = await loan_repo.list(filters={"member_id": member.id})
-    assert any(l.id == loan.id for l in loans)
+    assert any(loan_item.id == loan.id for loan_item in loans)
 
 
 @pytest.mark.asyncio

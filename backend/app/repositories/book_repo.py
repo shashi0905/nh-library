@@ -1,7 +1,7 @@
 """Book repository — SQLAlchemy async implementation."""
 
-from typing import Any
 import uuid
+from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -37,9 +37,11 @@ class BookRepository(IRepository[Book]):
             if filters.get("available_only"):
                 stmt = stmt.where(Book.available > 0)
             if q := filters.get("q"):
-                stmt = stmt.where(Book.search_vector.op("@@")(
-                    Book.search_vector.op("to_tsquery")(q)  # type: ignore[attr-defined]
-                ))
+                stmt = stmt.where(
+                    Book.search_vector.op("@@")(
+                        Book.search_vector.op("to_tsquery")(q)  # type: ignore[attr-defined]
+                    )
+                )
         if cursor:
             stmt = stmt.where(Book.id > cursor)
         stmt = stmt.order_by(Book.id).limit(limit)
@@ -50,9 +52,11 @@ class BookRepository(IRepository[Book]):
         """Full-text search on title + author via tsvector."""
         stmt = (
             select(Book)
-            .where(Book.search_vector.op("@@")(  # type: ignore[attr-defined]
-                Book.search_vector.op("plainto_tsquery")(query)
-            ))
+            .where(
+                Book.search_vector.op("@@")(  # type: ignore[attr-defined]
+                    Book.search_vector.op("plainto_tsquery")(query)
+                )
+            )
             .limit(limit)
         )
         result = await self._session.execute(stmt)

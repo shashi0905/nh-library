@@ -2,7 +2,7 @@
 
 import uuid
 
-from sqlalchemy import Index, Integer, String, Text
+from sqlalchemy import Index, Integer, String
 from sqlalchemy.dialects.postgresql import TSVECTOR, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -14,9 +14,7 @@ class Book(Base):
 
     __tablename__ = "books"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     isbn: Mapped[str] = mapped_column(String(13), unique=True, nullable=False, index=True)
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     author: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -25,6 +23,4 @@ class Book(Base):
     # Populated by a DB trigger; not written by the ORM directly.
     search_vector: Mapped[str | None] = mapped_column(TSVECTOR, nullable=True)
 
-    __table_args__ = (
-        Index("ix_books_search_vector", "search_vector", postgresql_using="gin"),
-    )
+    __table_args__ = (Index("ix_books_search_vector", "search_vector", postgresql_using="gin"),)

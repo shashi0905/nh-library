@@ -2,17 +2,19 @@
 
 import asyncio
 from collections.abc import AsyncGenerator, Generator
-from typing import Any
 
 import pytest
 import pytest_asyncio
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 from testcontainers.postgres import PostgresContainer
 
-from app.db.base import Base
-
-# Import models so metadata is populated before create_all.
 import app.db.models  # noqa: F401
+from app.db.base import Base
 
 
 @pytest.fixture(scope="session")
@@ -31,7 +33,7 @@ def pg_container() -> Generator[PostgresContainer, None, None]:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def db_engine(pg_container: PostgresContainer) -> Any:
+async def db_engine(pg_container: PostgresContainer) -> AsyncGenerator[AsyncEngine, None]:
     """Create async engine pointed at the test container and run migrations."""
     url = pg_container.get_connection_url().replace("psycopg2", "asyncpg")
     engine = create_async_engine(url)
@@ -44,10 +46,9 @@ async def db_engine(pg_container: PostgresContainer) -> Any:
 
 
 @pytest_asyncio.fixture
-async def session(db_engine: Any) -> AsyncGenerator[AsyncSession, None]:
+async def session(db_engine: AsyncEngine) -> AsyncGenerator[AsyncSession, None]:
     """Yield a session that rolls back after each test for isolation."""
     factory = async_sessionmaker(db_engine, expire_on_commit=False)
-    async with factory() as sess:
-        async with sess.begin():
-            yield sess
-            await sess.rollback()
+    async with factory() as sess, sess.begin():
+        yield sess
+        await sess.rollback()

@@ -7,9 +7,10 @@ Create Date: 2026-05-15
 
 from __future__ import annotations
 
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+
+from alembic import op
 
 revision: str = "0001"
 down_revision: str | None = None
@@ -116,7 +117,8 @@ def upgrade() -> None:
     op.create_index("ix_loans_due_date", "loans", ["due_date"])
 
     # ── tsvector trigger ──────────────────────────────────────────────────────
-    op.execute("""
+    op.execute(
+        """
         CREATE FUNCTION books_search_vector_update() RETURNS trigger AS $$
         BEGIN
             NEW.search_vector :=
@@ -125,28 +127,35 @@ def upgrade() -> None:
             RETURN NEW;
         END;
         $$ LANGUAGE plpgsql;
-    """)
-    op.execute("""
+    """
+    )
+    op.execute(
+        """
         CREATE TRIGGER books_search_vector_trigger
         BEFORE INSERT OR UPDATE ON books
         FOR EACH ROW EXECUTE FUNCTION books_search_vector_update();
-    """)
+    """
+    )
 
     # ── updated_at trigger ────────────────────────────────────────────────────
-    op.execute("""
+    op.execute(
+        """
         CREATE FUNCTION set_updated_at() RETURNS trigger AS $$
         BEGIN
             NEW.updated_at = now();
             RETURN NEW;
         END;
         $$ LANGUAGE plpgsql;
-    """)
+    """
+    )
     for table in ("books", "members"):
-        op.execute(f"""
+        op.execute(
+            f"""
             CREATE TRIGGER set_{table}_updated_at
             BEFORE UPDATE ON {table}
             FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-        """)
+        """
+        )
 
 
 def downgrade() -> None:
