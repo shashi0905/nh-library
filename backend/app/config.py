@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     # Database
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/library"
 
-    # Auth
-    secret_key: str = "change-me"
+    # Auth — must be set via environment variable (no default intentionally)
+    secret_key: str
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
