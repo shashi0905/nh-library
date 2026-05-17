@@ -190,8 +190,21 @@ async def test_return_book_success(
     )
 
     mock_loan_repo.get.return_value = loan
-    mock_loan_repo.update.return_value = loan
     mock_db.get.return_value = book
+
+    # Mock update to return updated loan
+    updated_loan = Loan(
+        id=loan_id,
+        book_id=book_id,
+        member_id=loan.member_id,
+        borrowed_at=loan.borrowed_at,
+        due_date=loan.due_date,
+        status=LoanStatus.RETURNED,
+        returned_at=dt.datetime.now(dt.UTC),
+        fine_amount=None,
+        fine_paid=None,
+    )
+    mock_loan_repo.update.return_value = updated_loan
 
     result = await loan_service.return_book(loan_id)
 
@@ -230,8 +243,21 @@ async def test_return_book_with_fine(
     )
 
     mock_loan_repo.get.return_value = loan
-    mock_loan_repo.update.return_value = loan
     mock_db.get.return_value = book
+
+    # Mock update to return updated loan with fine
+    updated_loan = Loan(
+        id=loan_id,
+        book_id=book_id,
+        member_id=loan.member_id,
+        borrowed_at=loan.borrowed_at,
+        due_date=loan.due_date,
+        status=LoanStatus.RETURNED,
+        returned_at=dt.datetime.now(dt.UTC),
+        fine_amount=Decimal("6.00"),
+        fine_paid=None,
+    )
+    mock_loan_repo.update.return_value = updated_loan
 
     result = await loan_service.return_book(loan_id)
 
@@ -397,7 +423,20 @@ async def test_pay_fine_success(loan_service: LoanService, mock_loan_repo: Async
     )
 
     mock_loan_repo.get.return_value = loan
-    mock_loan_repo.update.return_value = loan
+
+    # Mock update to return updated loan with fine_paid=True
+    updated_loan = Loan(
+        id=loan_id,
+        book_id=loan.book_id,
+        member_id=loan.member_id,
+        borrowed_at=loan.borrowed_at,
+        due_date=loan.due_date,
+        returned_at=loan.returned_at,
+        status=loan.status,
+        fine_amount=loan.fine_amount,
+        fine_paid=True,
+    )
+    mock_loan_repo.update.return_value = updated_loan
 
     result = await loan_service.pay_fine(loan_id)
 
