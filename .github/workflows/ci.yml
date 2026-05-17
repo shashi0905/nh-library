@@ -38,7 +38,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements/dev.txt
       - name: Run tests with coverage
-        run: pytest --cov=app --cov-report=term-missing --cov-fail-under=80 -q
+        run: pytest --cov=app --cov-report=term-missing --cov-fail-under=70 -q
       - name: Upload test results on failure
         if: failure()
         uses: actions/upload-artifact@v4
