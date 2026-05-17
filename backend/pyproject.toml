@@ -14,7 +14,7 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "ANN"]
-ignore = ["ANN401"]
+ignore = ["ANN401", "B008"]  # B008 is standard for FastAPI Depends
 
 [tool.ruff.lint.isort]
 known-first-party = ["app"]
