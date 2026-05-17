@@ -4,6 +4,7 @@ from collections.abc import AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -14,6 +15,7 @@ from testcontainers.postgres import PostgresContainer
 
 import app.db.models  # noqa: F401
 from app.db.base import Base
+from app.main import app
 
 
 @pytest.fixture(scope="session")
@@ -48,3 +50,12 @@ async def session(db_engine: AsyncEngine) -> AsyncGenerator[AsyncSession, None]:
     async with factory() as sess, sess.begin():
         yield sess
         await sess.rollback()
+
+
+@pytest_asyncio.fixture
+async def client() -> AsyncGenerator[AsyncClient, None]:
+    """Yield an async HTTP client for testing the FastAPI application."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as async_client:
+        yield async_client
+
