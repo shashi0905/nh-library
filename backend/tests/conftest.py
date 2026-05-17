@@ -18,10 +18,14 @@ from app.db.base import Base
 from app.main import app
 
 
-@pytest_asyncio.fixture
+@pytest_asyncio.fixture(scope="session")
 async def db_engine() -> AsyncGenerator[AsyncEngine, None]:
-    """Create a fresh async engine per test and apply schema using CI postgres."""
+    """Create a fresh async engine per test session and apply schema using CI postgres."""
+    # Explicitly use test_db to avoid any config.py defaults
     db_url = os.getenv("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@localhost:5432/test_db")
+    # Ensure we're using test_db, not library
+    if "library" in db_url:
+        db_url = db_url.replace("/library", "/test_db")
     engine = create_async_engine(db_url)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
