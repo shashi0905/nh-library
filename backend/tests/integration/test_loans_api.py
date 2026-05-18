@@ -23,7 +23,7 @@ async def test_list_loans_empty(
 ) -> None:
     """Test listing loans when none exist."""
     response = await client.get(
-        "/api/v1/loans",
+        "/api/v1/loans/",
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 

@@ -22,7 +22,7 @@ async def test_list_books_empty(
 ) -> None:
     """Test listing books when none exist."""
     response = await client.get(
-        "/api/v1/books",
+        "/api/v1/books/",
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 
@@ -43,7 +43,7 @@ async def test_create_book(session: AsyncSession, staff_token: str, client: Asyn
     }
 
     response = await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json=book_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -72,14 +72,14 @@ async def test_create_book_duplicate_isbn(
 
     # First creation
     await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json=book_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 
     # Second creation with same ISBN
     response = await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json=book_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -100,7 +100,7 @@ async def test_create_book_invalid_isbn(
     }
 
     response = await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json=book_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -120,7 +120,7 @@ async def test_get_book(session: AsyncSession, staff_token: str, client: AsyncCl
     }
 
     create_response = await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json=book_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -157,7 +157,7 @@ async def test_update_book(session: AsyncSession, staff_token: str, client: Asyn
     }
 
     create_response = await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json=book_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -205,7 +205,7 @@ async def test_deactivate_book(
     }
 
     create_response = await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json=book_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -246,7 +246,7 @@ async def test_list_books_with_pagination(
     # Create multiple books
     for i in range(25):
         await client.post(
-            "/api/v1/books",
+            "/api/v1/books/",
             json={
                 "isbn": f"97801346859{i:02d}",
                 "title": f"Book {i}",
@@ -258,7 +258,7 @@ async def test_list_books_with_pagination(
 
     # List books with limit
     response = await client.get(
-        "/api/v1/books?limit=20",
+        "/api/v1/books/?limit=20",
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 
@@ -275,7 +275,7 @@ async def test_list_books_with_search(
     """Test listing books with search query."""
     # Create books
     await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json={
             "isbn": "9780134685991",
             "title": "Effective Python",
@@ -285,7 +285,7 @@ async def test_list_books_with_search(
         headers={"Authorization": f"Bearer {staff_token}"},
     )
     await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json={
             "isbn": "9780132350884",
             "title": "Clean Code",
@@ -297,7 +297,7 @@ async def test_list_books_with_search(
 
     # Search for "Python"
     response = await client.get(
-        "/api/v1/books?q=python",
+        "/api/v1/books/?q=python",
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 
@@ -314,7 +314,7 @@ async def test_list_books_available_only(
     """Test listing only available books."""
     # Create a book with available copies
     await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json={
             "isbn": "9780134685991",
             "title": "Available Book",
@@ -326,7 +326,7 @@ async def test_list_books_available_only(
 
     # List available books
     response = await client.get(
-        "/api/v1/books?available_only=true",
+        "/api/v1/books/?available_only=true",
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 
@@ -345,7 +345,7 @@ async def test_create_book_requires_auth(session: AsyncSession, client: AsyncCli
         "total_copies": 5,
     }
 
-    response = await client.post("/api/v1/books", json=book_data)
+    response = await client.post("/api/v1/books/", json=book_data)
 
     assert response.status_code == 401
 
@@ -357,7 +357,7 @@ async def test_update_book_requires_auth(
     """Test updating a book without authentication returns 401."""
     # Create a book first
     create_response = await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json={
             "isbn": "9780134685991",
             "title": "Effective Python",
@@ -384,7 +384,7 @@ async def test_delete_book_requires_auth(
     """Test deleting a book without authentication returns 401."""
     # Create a book first
     create_response = await client.post(
-        "/api/v1/books",
+        "/api/v1/books/",
         json={
             "isbn": "9780134685991",
             "title": "Effective Python",

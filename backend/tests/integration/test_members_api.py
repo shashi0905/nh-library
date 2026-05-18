@@ -22,7 +22,7 @@ async def test_list_members_empty(
 ) -> None:
     """Test listing members when none exist."""
     response = await client.get(
-        "/api/v1/members",
+        "/api/v1/members/",
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 
@@ -44,7 +44,7 @@ async def test_register_member(
     }
 
     response = await client.post(
-        "/api/v1/members",
+        "/api/v1/members/",
         json=member_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -71,14 +71,14 @@ async def test_register_member_duplicate_email(
 
     # First registration
     await client.post(
-        "/api/v1/members",
+        "/api/v1/members/",
         json=member_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 
     # Second registration with same email
     response = await client.post(
-        "/api/v1/members",
+        "/api/v1/members/",
         json=member_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -97,7 +97,7 @@ async def test_get_member(session: AsyncSession, staff_token: str, client: Async
     }
 
     create_response = await client.post(
-        "/api/v1/members",
+        "/api/v1/members/",
         json=member_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -133,7 +133,7 @@ async def test_update_member(session: AsyncSession, staff_token: str, client: As
     }
 
     create_response = await client.post(
-        "/api/v1/members",
+        "/api/v1/members/",
         json=member_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
@@ -175,7 +175,7 @@ async def test_update_member_duplicate_email(
     """Test updating member with duplicate email returns 409."""
     # Register two members
     member1_response = await client.post(
-        "/api/v1/members",
+        "/api/v1/members/",
         json={
             "name": "John Doe",
             "email": "john@example.com",
@@ -186,7 +186,7 @@ async def test_update_member_duplicate_email(
     member1_id = member1_response.json()["id"]
 
     await client.post(
-        "/api/v1/members",
+        "/api/v1/members/",
         json={
             "name": "Jane Smith",
             "email": "jane@example.com",
@@ -213,7 +213,7 @@ async def test_list_members_with_pagination(
     # Create multiple members
     for i in range(25):
         await client.post(
-            "/api/v1/members",
+            "/api/v1/members/",
             json={
                 "name": f"Member {i}",
                 "email": f"member{i}@example.com",
@@ -224,7 +224,7 @@ async def test_list_members_with_pagination(
 
     # List members with limit
     response = await client.get(
-        "/api/v1/members?limit=20",
+        "/api/v1/members/?limit=20",
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 
@@ -242,7 +242,7 @@ async def test_list_members_with_cursor(
     # Create members
     for i in range(25):
         await client.post(
-            "/api/v1/members",
+            "/api/v1/members/",
             json={
                 "name": f"Member {i}",
                 "email": f"member{i}@example.com",
@@ -253,7 +253,7 @@ async def test_list_members_with_cursor(
 
     # Get first page
     first_response = await client.get(
-        "/api/v1/members?limit=20",
+        "/api/v1/members/?limit=20",
         headers={"Authorization": f"Bearer {staff_token}"},
     )
     first_data = first_response.json()
@@ -261,7 +261,7 @@ async def test_list_members_with_cursor(
 
     # Get second page with cursor
     second_response = await client.get(
-        f"/api/v1/members?limit=20&cursor={next_cursor}",
+        f"/api/v1/members/?limit=20&cursor={next_cursor}",
         headers={"Authorization": f"Bearer {staff_token}"},
     )
 
@@ -280,7 +280,7 @@ async def test_register_member_requires_auth(session: AsyncSession, client: Asyn
         "phone": "555-1234",
     }
 
-    response = await client.post("/api/v1/members", json=member_data)
+    response = await client.post("/api/v1/members/", json=member_data)
 
     assert response.status_code == 401
 
@@ -292,7 +292,7 @@ async def test_update_member_requires_auth(
     """Test updating a member without authentication returns 401."""
     # Create a member first
     create_response = await client.post(
-        "/api/v1/members",
+        "/api/v1/members/",
         json={
             "name": "John Doe",
             "email": "john@example.com",
@@ -322,7 +322,7 @@ async def test_register_member_without_phone(
     }
 
     response = await client.post(
-        "/api/v1/members",
+        "/api/v1/members/",
         json=member_data,
         headers={"Authorization": f"Bearer {staff_token}"},
     )
