@@ -4,7 +4,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { authApi, TokenRequest } from "@/lib/api";
+import { authApi } from "@/lib/api";
+import type { TokenRequest } from "@/lib/api";
 import { FormField } from "@/components/FormField";
 
 export default function LoginPage() {

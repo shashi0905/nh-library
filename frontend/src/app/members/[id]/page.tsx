@@ -4,7 +4,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { membersApi, loansApi, MemberResponse, MemberUpdate, LoanResponse } from "@/lib/api";
+import { membersApi, loansApi } from "@/lib/api";
+import type { MemberResponse, MemberUpdate, LoanResponse } from "@/lib/api";
 import { FormField } from "@/components/FormField";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { StatusBadge } from "@/components/StatusBadge";

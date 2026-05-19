@@ -4,8 +4,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { loansApi, LoanResponse, LoanListResponse, LoanStatus } from "@/lib/api";
-import { DataTable, Column } from "@/components/DataTable";
+import { loansApi, LoanStatus } from "@/lib/api";
+import type { LoanResponse, LoanListResponse } from "@/lib/api";
+import { DataTable } from "@/components/DataTable";
+import type { Column } from "@/components/DataTable";
 import { StatusBadge } from "@/components/StatusBadge";
 
 // Helper function to check if a string is a valid UUID
@@ -84,10 +86,6 @@ export default function LoansPage() {
     if (nextCursor) {
       fetchLoans(nextCursor);
     }
-  };
-
-  const handleRowClick = (loan: LoanResponse) => {
-    router.push(`/loans/${loan.id}`);
   };
 
   return (

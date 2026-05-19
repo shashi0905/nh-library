@@ -3,7 +3,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { booksApi, membersApi, loansApi, BookListResponse, MemberListResponse, LoanListResponse } from "@/lib/api";
+import { booksApi, membersApi, loansApi } from "@/lib/api";
+import type { BookListResponse, MemberListResponse, LoanListResponse } from "@/lib/api";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({
@@ -19,7 +20,8 @@ export default function DashboardPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const [booksResponse, membersResponse, loansResponse]: [
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const [_, membersResponse, __]: [
         BookListResponse,
         MemberListResponse,
         LoanListResponse,

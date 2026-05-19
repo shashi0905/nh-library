@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Sidebar } from "@/components/Sidebar";
-import { Header } from "@/components/Header";
 import { AuthProvider } from "@/components/AuthProvider";
 import { AuthenticatedLayout } from "@/components/AuthenticatedLayout";
 

@@ -4,8 +4,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { loansApi, booksApi, membersApi, BookResponse, MemberResponse, LoanCreate } from "@/lib/api";
-import { FormField } from "@/components/FormField";
+import { loansApi, booksApi, membersApi } from "@/lib/api";
+import type { BookResponse, MemberResponse, LoanCreate } from "@/lib/api";
 
 export default function BorrowBookPage() {
   const router = useRouter();

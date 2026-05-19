@@ -4,7 +4,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { booksApi, BookResponse, BookUpdate } from "@/lib/api";
+import { booksApi } from "@/lib/api";
+import type { BookResponse, BookUpdate } from "@/lib/api";
 import { FormField } from "@/components/FormField";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 

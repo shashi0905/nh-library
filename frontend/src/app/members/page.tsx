@@ -4,8 +4,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { membersApi, MemberResponse, MemberListResponse } from "@/lib/api";
-import { DataTable, Column } from "@/components/DataTable";
+import { membersApi } from "@/lib/api";
+import type { MemberResponse, MemberListResponse } from "@/lib/api";
+import { DataTable } from "@/components/DataTable";
+import type { Column } from "@/components/DataTable";
 
 const columns: Column<MemberResponse>[] = [
   { key: "name", label: "Name", sortable: true },
@@ -72,10 +74,6 @@ export default function MembersPage() {
     if (nextCursor) {
       fetchMembers(nextCursor);
     }
-  };
-
-  const handleRowClick = (member: MemberResponse) => {
-    router.push(`/members/${member.id}`);
   };
 
   return (

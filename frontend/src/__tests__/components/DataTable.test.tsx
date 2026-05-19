@@ -1,7 +1,8 @@
 /** Tests for DataTable component. */
 
 import { render, screen, fireEvent } from "@testing-library/react";
-import { DataTable, Column } from "@/components/DataTable";
+import { DataTable } from "@/components/DataTable";
+import type { Column } from "@/components/DataTable";
 
 interface TestItem {
   id: number;

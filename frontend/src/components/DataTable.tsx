@@ -1,6 +1,6 @@
 /** Data table component with sorting, pagination, and cursor-based pagination support. */
 
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export interface Column<T> {
   key: keyof T;

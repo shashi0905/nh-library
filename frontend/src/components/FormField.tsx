@@ -1,6 +1,7 @@
 /** Form field component with label, input, and error message. */
 
-import { InputHTMLAttributes, forwardRef } from "react";
+import { forwardRef } from "react";
+import type { InputHTMLAttributes } from "react";
 
 interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;

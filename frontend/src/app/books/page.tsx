@@ -4,8 +4,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { booksApi, BookResponse, BookListResponse } from "@/lib/api";
-import { DataTable, Column } from "@/components/DataTable";
+import { booksApi } from "@/lib/api";
+import type { BookResponse, BookListResponse } from "@/lib/api";
+import { DataTable } from "@/components/DataTable";
+import type { Column } from "@/components/DataTable";
 
 const columns: Column<BookResponse>[] = [
   { key: "isbn", label: "ISBN", sortable: true },
@@ -59,10 +61,6 @@ export default function BooksPage() {
     if (nextCursor) {
       fetchBooks(nextCursor);
     }
-  };
-
-  const handleRowClick = (book: BookResponse) => {
-    router.push(`/books/${book.id}`);
   };
 
   return (
