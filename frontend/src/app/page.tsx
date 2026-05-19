@@ -21,29 +21,23 @@ export default function DashboardPage() {
     setError(null);
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [_, membersResponse, __]: [
-        BookListResponse,
-        MemberListResponse,
-        LoanListResponse,
-      ] = await Promise.all([
-        booksApi.list({ limit: 1 }),
-        membersApi.list({ limit: 1 }),
-        loansApi.list({ limit: 1 }),
-      ]);
+      const [_, membersResponse, __]: [BookListResponse, MemberListResponse, LoanListResponse] =
+        await Promise.all([
+          booksApi.list({ limit: 1 }),
+          membersApi.list({ limit: 1 }),
+          loansApi.list({ limit: 1 }),
+        ]);
 
       // Fetch full counts by making additional calls
-      const [allBooks, allLoans]: [BookListResponse, LoanListResponse] =
-        await Promise.all([
-          booksApi.list({ limit: 1000 }),
-          loansApi.list({ limit: 1000 }),
-        ]);
+      const [allBooks, allLoans]: [BookListResponse, LoanListResponse] = await Promise.all([
+        booksApi.list({ limit: 1000 }),
+        loansApi.list({ limit: 1000 }),
+      ]);
 
       const activeLoans = allLoans.items.filter(
         (loan) => loan.status === "ACTIVE" || loan.status === "OVERDUE",
       ).length;
-      const overdueLoans = allLoans.items.filter(
-        (loan) => loan.status === "OVERDUE",
-      ).length;
+      const overdueLoans = allLoans.items.filter((loan) => loan.status === "OVERDUE").length;
 
       setStats({
         totalBooks: allBooks.items.length,

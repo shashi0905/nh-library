@@ -57,9 +57,7 @@ describe("DataTable", () => {
       { key: "id", label: "ID", sortable: false },
       { key: "name", label: "Name", sortable: false },
     ];
-    render(
-      <DataTable columns={nonSortableColumns} data={testData} onSort={onSort} />,
-    );
+    render(<DataTable columns={nonSortableColumns} data={testData} onSort={onSort} />);
     const header = screen.getByText("Name");
     fireEvent.click(header);
     expect(onSort).not.toHaveBeenCalled();
@@ -82,12 +80,7 @@ describe("DataTable", () => {
   it("calls onNextPage when Load More button is clicked", () => {
     const onNextPage = jest.fn();
     render(
-      <DataTable
-        columns={columns}
-        data={testData}
-        onNextPage={onNextPage}
-        hasNextPage={true}
-      />,
+      <DataTable columns={columns} data={testData} onNextPage={onNextPage} hasNextPage={true} />,
     );
     const button = screen.getByText("Load More");
     fireEvent.click(button);
@@ -96,12 +89,7 @@ describe("DataTable", () => {
 
   it("does not show Load More button when hasNextPage is false", () => {
     render(
-      <DataTable
-        columns={columns}
-        data={testData}
-        onNextPage={jest.fn()}
-        hasNextPage={false}
-      />,
+      <DataTable columns={columns} data={testData} onNextPage={jest.fn()} hasNextPage={false} />,
     );
     expect(screen.queryByText("Load More")).not.toBeInTheDocument();
   });

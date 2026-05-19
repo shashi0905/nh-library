@@ -40,15 +40,9 @@ export function DataTable<T>({
                 key={String(column.key)}
                 scope="col"
                 className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                  column.sortable && onSort
-                    ? "cursor-pointer hover:bg-gray-100"
-                    : ""
+                  column.sortable && onSort ? "cursor-pointer hover:bg-gray-100" : ""
                 }`}
-                onClick={
-                  column.sortable && onSort
-                    ? () => onSort(column.key)
-                    : undefined
-                }
+                onClick={column.sortable && onSort ? () => onSort(column.key) : undefined}
                 aria-sort={
                   sortKey === column.key
                     ? sortDirection === "asc"
@@ -60,9 +54,7 @@ export function DataTable<T>({
                 <div className="flex items-center">
                   {column.label}
                   {column.sortable && sortKey === column.key && (
-                    <span className="ml-2">
-                      {sortDirection === "asc" ? "↑" : "↓"}
-                    </span>
+                    <span className="ml-2">{sortDirection === "asc" ? "↑" : "↓"}</span>
                   )}
                 </div>
               </th>
@@ -72,10 +64,7 @@ export function DataTable<T>({
         <tbody className="bg-white divide-y divide-gray-200">
           {data.length === 0 ? (
             <tr>
-              <td
-                colSpan={columns.length}
-                className="px-6 py-4 text-center text-sm text-gray-500"
-              >
+              <td colSpan={columns.length} className="px-6 py-4 text-center text-sm text-gray-500">
                 {isLoading ? "Loading..." : "No data available"}
               </td>
             </tr>

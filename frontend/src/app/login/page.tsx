@@ -27,9 +27,7 @@ export default function LoginPage() {
       router.push("/");
     } catch (err) {
       const apiError = err as { message?: string; detail?: unknown };
-      setError(
-        apiError.message || "Login failed. Please check your credentials.",
-      );
+      setError(apiError.message || "Login failed. Please check your credentials.");
       setIsLoading(false);
     }
   };
@@ -44,12 +42,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-900 mb-8">
-          Neighborhood Library
-        </h1>
-        <h2 className="text-xl font-semibold text-center text-gray-700 mb-6">
-          Staff Login
-        </h2>
+        <h1 className="text-2xl font-bold text-center text-gray-900 mb-8">Neighborhood Library</h1>
+        <h2 className="text-xl font-semibold text-center text-gray-700 mb-6">Staff Login</h2>
         <form onSubmit={handleSubmit}>
           <FormField
             id="email"

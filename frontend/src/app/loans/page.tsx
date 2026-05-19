@@ -56,7 +56,7 @@ export default function LoansPage() {
     setError(null);
     try {
       const response: LoanListResponse = await loansApi.list({
-        status: statusFilter as LoanStatus || undefined,
+        status: (statusFilter as LoanStatus) || undefined,
         // Only pass member_id if it's a valid UUID
         member_id: isValidUUID(memberFilter) ? memberFilter : undefined,
         overdue: overdueFilter || undefined,

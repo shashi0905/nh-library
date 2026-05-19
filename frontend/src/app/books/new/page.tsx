@@ -25,7 +25,7 @@ export default function AddBookPage() {
         isbn,
         title,
         author,
-        total_copies: typeof totalCopies === 'number' ? totalCopies : undefined,
+        total_copies: typeof totalCopies === "number" ? totalCopies : undefined,
       });
       setSuccess("Book added successfully!");
       setIsbn("");
@@ -36,9 +36,10 @@ export default function AddBookPage() {
       router.push("/books");
     } catch (err) {
       const apiError = err as { message?: string; detail?: unknown };
-      const errorMessage = typeof apiError.detail === "string" 
-        ? apiError.detail 
-        : apiError.message || "Failed to add book.";
+      const errorMessage =
+        typeof apiError.detail === "string"
+          ? apiError.detail
+          : apiError.message || "Failed to add book.";
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -115,7 +116,7 @@ export default function AddBookPage() {
             id="totalCopies"
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             value={totalCopies}
-            onChange={(e) => setTotalCopies(e.target.value === '' ? '' : Number(e.target.value))}
+            onChange={(e) => setTotalCopies(e.target.value === "" ? "" : Number(e.target.value))}
             min="1"
           />
         </div>

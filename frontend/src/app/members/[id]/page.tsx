@@ -99,11 +99,7 @@ export default function MemberDetailPage() {
   }
 
   if (!member) {
-    return (
-      <div className="text-center py-8 text-red-600">
-        Member not found
-      </div>
-    );
+    return <div className="text-center py-8 text-red-600">Member not found</div>;
   }
 
   return (

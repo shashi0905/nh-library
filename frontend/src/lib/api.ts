@@ -129,10 +129,7 @@ export interface RefreshTokenRequest {
 // ============================================================================
 
 /** Helper function to make authenticated API requests. */
-async function fetchWithAuth(
-  endpoint: string,
-  options: RequestInit = {},
-): Promise<Response> {
+async function fetchWithAuth(endpoint: string, options: RequestInit = {}): Promise<Response> {
   const url = `${API_BASE_URL}${endpoint}`;
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -158,11 +155,7 @@ async function fetchWithAuth(
     } catch {
       errorDetail = await response.text();
     }
-    throw new ApiError(
-      `API request failed: ${response.statusText}`,
-      response.status,
-      errorDetail,
-    );
+    throw new ApiError(`API request failed: ${response.statusText}`, response.status, errorDetail);
   }
 
   return response;
@@ -214,11 +207,7 @@ export const authApi = {
 
 export const booksApi = {
   /** Get a paginated list of books with optional search and cursor. */
-  async list(params?: {
-    q?: string;
-    cursor?: string;
-    limit?: number;
-  }): Promise<BookListResponse> {
+  async list(params?: { q?: string; cursor?: string; limit?: number }): Promise<BookListResponse> {
     const queryParams = new URLSearchParams();
     if (params?.q) queryParams.append("q", params.q);
     if (params?.cursor) queryParams.append("cursor", params.cursor);

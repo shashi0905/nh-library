@@ -85,11 +85,7 @@ export default function BookDetailPage() {
   }
 
   if (!book) {
-    return (
-      <div className="text-center py-8 text-red-600">
-        Book not found
-      </div>
-    );
+    return <div className="text-center py-8 text-red-600">Book not found</div>;
   }
 
   return (

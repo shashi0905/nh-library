@@ -14,15 +14,7 @@ interface ConfirmDialogProps {
 
 export const ConfirmDialog = forwardRef<HTMLDivElement, ConfirmDialogProps>(
   (
-    {
-      isOpen,
-      onClose,
-      onConfirm,
-      title,
-      message,
-      confirmText = "Confirm",
-      cancelText = "Cancel",
-    },
+    { isOpen, onClose, onConfirm, title, message, confirmText = "Confirm", cancelText = "Cancel" },
     ref,
   ) => {
     if (!isOpen) return null;
@@ -37,10 +29,7 @@ export const ConfirmDialog = forwardRef<HTMLDivElement, ConfirmDialogProps>(
         aria-describedby="dialog-description"
       >
         <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
-          <h2
-            id="dialog-title"
-            className="text-lg font-semibold text-gray-900 mb-2"
-          >
+          <h2 id="dialog-title" className="text-lg font-semibold text-gray-900 mb-2">
             {title}
           </h2>
           <p id="dialog-description" className="text-gray-600 mb-6">

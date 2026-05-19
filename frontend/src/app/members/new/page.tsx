@@ -30,9 +30,10 @@ export default function RegisterMemberPage() {
       router.push("/members");
     } catch (err) {
       const apiError = err as { message?: string; detail?: unknown };
-      const errorMessage = typeof apiError.detail === "string" 
-        ? apiError.detail 
-        : apiError.message || "Failed to register member.";
+      const errorMessage =
+        typeof apiError.detail === "string"
+          ? apiError.detail
+          : apiError.message || "Failed to register member.";
       setError(errorMessage);
     } finally {
       setIsLoading(false);

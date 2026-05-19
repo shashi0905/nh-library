@@ -15,7 +15,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkAuth = () => {
       const token = localStorage.getItem("access_token");
       const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
-      
+
       if (!token && !isPublicPath) {
         router.push("/login");
       } else if (token && isPublicPath) {

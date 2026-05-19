@@ -12,10 +12,7 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
   ({ label, error, id, className = "", ...props }, ref) => {
     return (
       <div className="mb-4">
-        <label
-          htmlFor={id}
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
+        <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
           {label}
         </label>
         <input
@@ -29,11 +26,7 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
           {...props}
         />
         {error && (
-          <p
-            id={`${id}-error`}
-            className="mt-1 text-sm text-red-600"
-            role="alert"
-          >
+          <p id={`${id}-error`} className="mt-1 text-sm text-red-600" role="alert">
             {error}
           </p>
         )}
