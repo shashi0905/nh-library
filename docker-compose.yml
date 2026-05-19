@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:16-alpine
+    container_name: library-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -14,6 +15,39 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - library-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: library-backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/library
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-key-change-in-production}
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      REFRESH_TOKEN_EXPIRE_DAYS: 7
+      LOAN_DURATION_DAYS: 14
+      FINE_RATE_PER_DAY: 1.00
+      LOG_LEVEL: INFO
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+    networks:
+      - library-network
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
 volumes:
   pgdata:
+
+networks:
+  library-network:
+    driver: bridge
+

@@ -13,15 +13,15 @@ from app.repositories.book_repo import BookRepository
 from app.schemas.book import BookCreate, BookListResponse, BookResponse, BookUpdate
 from app.services.book_service import BookService
 
-router = APIRouter(prefix="/books", tags=["books"])
+router = APIRouter(prefix="/books", tags=["books"], redirect_slashes=False)
 
 
-@router.get("/", response_model=BookListResponse)
+@router.get("", response_model=BookListResponse)
 async def list_books(
     q: Annotated[str | None, Query()] = None,
     available_only: Annotated[bool, Query()] = False,
     cursor: Annotated[str | None, Query()] = None,
-    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    limit: Annotated[int, Query(ge=1, le=1000)] = 20,
     db: AsyncSession = Depends(get_db),
 ) -> BookListResponse:
     """List books with optional search and pagination."""
@@ -44,7 +44,7 @@ async def list_books(
     )
 
 
-@router.post("/", response_model=BookResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=BookResponse, status_code=status.HTTP_201_CREATED)
 async def create_book(
     book: BookCreate,
     db: AsyncSession = Depends(get_db),

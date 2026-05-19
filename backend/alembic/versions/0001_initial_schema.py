@@ -110,6 +110,12 @@ def upgrade() -> None:
             server_default=sa.func.now(),
             nullable=False,
         ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.func.now(),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["book_id"], ["books.id"], ondelete="RESTRICT"),
         sa.ForeignKeyConstraint(["member_id"], ["members.id"], ondelete="RESTRICT"),
     )
@@ -148,7 +154,7 @@ def upgrade() -> None:
         $$ LANGUAGE plpgsql;
     """
     )
-    for table in ("books", "members"):
+    for table in ("books", "members", "loans"):
         op.execute(
             f"""
             CREATE TRIGGER set_{table}_updated_at
@@ -160,7 +166,7 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     """Drop all tables, indexes, triggers, and functions."""
-    for table in ("books", "members"):
+    for table in ("books", "members", "loans"):
         op.execute(f"DROP TRIGGER IF EXISTS set_{table}_updated_at ON {table}")
     op.execute("DROP TRIGGER IF EXISTS books_search_vector_trigger ON books")
     op.execute("DROP FUNCTION IF EXISTS books_search_vector_update")

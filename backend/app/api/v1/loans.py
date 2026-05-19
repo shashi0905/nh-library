@@ -25,10 +25,10 @@ from app.schemas.loan import (
 )
 from app.services.loan_service import LoanService
 
-router = APIRouter(prefix="/loans", tags=["loans"])
+router = APIRouter(prefix="/loans", tags=["loans"], redirect_slashes=False)
 
 
-@router.post("/", response_model=LoanResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=LoanResponse, status_code=status.HTTP_201_CREATED)
 async def borrow_book(
     loan: LoanCreate,
     db: AsyncSession = Depends(get_db),
@@ -71,13 +71,13 @@ async def return_book(
         raise HTTPException(status_code=409, detail="Loan already returned") from err
 
 
-@router.get("/", response_model=LoanListResponse)
+@router.get("", response_model=LoanListResponse)
 async def list_loans(
     member_id: Annotated[str | None, Query()] = None,
     status_filter: Annotated[str | None, Query(alias="status")] = None,
     overdue: Annotated[bool, Query()] = False,
     cursor: Annotated[str | None, Query()] = None,
-    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    limit: Annotated[int, Query(ge=1, le=1000)] = 20,
     db: AsyncSession = Depends(get_db),
 ) -> LoanListResponse:
     """List loans with optional filters and pagination."""

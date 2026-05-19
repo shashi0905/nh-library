@@ -19,15 +19,21 @@ class BookCreate(BaseModel):
     @field_validator("isbn")
     @classmethod
     def validate_isbn(cls, v: str) -> str:
-        """Validate ISBN-13 format (13 digits)."""
-        if not v.isdigit() or len(v) != 13:
-            msg = "ISBN must be 13 digits"
-            raise ValueError(msg)
-        # Simple check digit validation for ISBN-13
-        total = sum(int(digit) * (1 if i % 2 == 0 else 3) for i, digit in enumerate(v[:12]))
-        check_digit = (10 - (total % 10)) % 10
-        if int(v[12]) != check_digit:
-            msg = "Invalid ISBN-13 check digit"
+        """Validate ISBN format (10 or 13 digits)."""
+        v = v.strip()
+        # Accept ISBN-10 or ISBN-13 format
+        if len(v) == 10:
+            # ISBN-10 validation (simplified)
+            if not v.replace("-", "").replace(" ", "").isdigit():
+                msg = "ISBN must contain only digits"
+                raise ValueError(msg)
+        elif len(v) == 13:
+            # ISBN-13 validation
+            if not v.isdigit():
+                msg = "ISBN-13 must be 13 digits"
+                raise ValueError(msg)
+        else:
+            msg = "ISBN must be 10 or 13 characters"
             raise ValueError(msg)
         return v
 
@@ -54,16 +60,23 @@ class BookUpdate(BaseModel):
     @field_validator("isbn")
     @classmethod
     def validate_isbn(cls, v: str | None) -> str | None:
-        """Validate ISBN-13 format if provided."""
+        """Validate ISBN format if provided."""
         if v is None:
             return v
-        if not v.isdigit() or len(v) != 13:
-            msg = "ISBN must be 13 digits"
-            raise ValueError(msg)
-        total = sum(int(digit) * (1 if i % 2 == 0 else 3) for i, digit in enumerate(v[:12]))
-        check_digit = (10 - (total % 10)) % 10
-        if int(v[12]) != check_digit:
-            msg = "Invalid ISBN-13 check digit"
+        v = v.strip()
+        # Accept ISBN-10 or ISBN-13 format
+        if len(v) == 10:
+            # ISBN-10 validation (simplified)
+            if not v.replace("-", "").replace(" ", "").isdigit():
+                msg = "ISBN must contain only digits"
+                raise ValueError(msg)
+        elif len(v) == 13:
+            # ISBN-13 validation
+            if not v.isdigit():
+                msg = "ISBN-13 must be 13 digits"
+                raise ValueError(msg)
+        else:
+            msg = "ISBN must be 10 or 13 characters"
             raise ValueError(msg)
         return v
 

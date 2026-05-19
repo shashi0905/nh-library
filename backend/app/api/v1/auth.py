@@ -12,7 +12,7 @@ from app.config import settings
 from app.repositories.user_repo import UserRepository
 from app.schemas.auth import RefreshTokenRequest, TokenRequest, TokenResponse
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="/auth", tags=["auth"], redirect_slashes=False)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -71,3 +71,9 @@ async def refresh_token(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Invalid token: {str(e)}",
         ) from e
+
+
+@router.post("/logout")
+async def logout() -> dict[str, str]:
+    """Logout endpoint (client-side token removal)."""
+    return {"message": "Logout successful"}

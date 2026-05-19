@@ -3,7 +3,7 @@
 from collections.abc import AsyncGenerator
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, Header, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.jwt import TokenData, decode_token
@@ -17,7 +17,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         yield session
 
 
-async def get_current_user(authorization: str | None = None) -> TokenData:
+async def get_current_user(authorization: Annotated[str | None, Header()] = None) -> TokenData:
     """Get current user from Bearer token."""
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(

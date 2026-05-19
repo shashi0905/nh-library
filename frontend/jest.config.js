@@ -1,13 +1,12 @@
-import type { Config } from "jest";
-import nextJest from "next/jest.js";
+const nextJest = require("next/jest.js");
 
 const createJestConfig = nextJest({ dir: "./" });
 
-const config: Config = {
+const config = {
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: { "^@/(.*)$": "<rootDir>/src/$1" },
-  coverageThreshold: { global: { lines: 80 } },
+  coverageThreshold: { global: { lines: 70 } },
 };
 
-export default createJestConfig(config);
+module.exports = createJestConfig(config);

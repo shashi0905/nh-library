@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     # Database
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/library"
+    database_url: str = "postgresql+asyncpg://postgres:postgres@db:5432/library"
 
     # Auth — must be set via environment variable (no default intentionally)
     secret_key: str = "dev-secret-key-change-in-production"
