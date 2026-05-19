@@ -13,13 +13,13 @@ from app.repositories.member_repo import MemberRepository
 from app.schemas.member import MemberCreate, MemberListResponse, MemberResponse, MemberUpdate
 from app.services.member_service import MemberService
 
-router = APIRouter(prefix="/members", tags=["members"])
+router = APIRouter(prefix="/members", tags=["members"], redirect_slashes=False)
 
 
-@router.get("/", response_model=MemberListResponse)
+@router.get("", response_model=MemberListResponse)
 async def list_members(
     cursor: Annotated[str | None, Query()] = None,
-    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    limit: Annotated[int, Query(ge=1, le=1000)] = 20,
     db: AsyncSession = Depends(get_db),
 ) -> MemberListResponse:
     """List active members with pagination."""
@@ -40,7 +40,7 @@ async def list_members(
     )
 
 
-@router.post("/", response_model=MemberResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=MemberResponse, status_code=status.HTTP_201_CREATED)
 async def register_member(
     member: MemberCreate,
     db: AsyncSession = Depends(get_db),
