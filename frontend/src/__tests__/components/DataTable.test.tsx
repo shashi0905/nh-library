@@ -111,7 +111,7 @@ describe("DataTable", () => {
       {
         key: "value",
         label: "Value",
-        render: (value) => <span>${value}</span>,
+        render: (value) => <span>${value as number}</span>,
       },
     ];
     render(<DataTable columns={customColumns} data={testData} />);

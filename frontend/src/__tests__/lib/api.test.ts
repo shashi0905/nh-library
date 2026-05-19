@@ -221,7 +221,7 @@ describe("API Client", () => {
         json: async () => ({ items: [], next_cursor: null }),
       });
 
-      await loansApi.list({ status: "ACTIVE", member_id: "1" });
+      await loansApi.list({ status: "ACTIVE" as any, member_id: "1" });
 
       expect(global.fetch).toHaveBeenCalled();
       const callArgs = (global.fetch as jest.Mock).mock.calls[0];

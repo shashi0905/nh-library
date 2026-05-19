@@ -142,7 +142,7 @@ async function fetchWithAuth(
   // Add Authorization header if token is stored in localStorage
   const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
   }
 
   const response = await fetch(url, {
