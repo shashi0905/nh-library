@@ -12,7 +12,7 @@ from app.db.models.loan import LoanStatus
 class LoanCreate(BaseModel):
     """Request schema for creating (borrowing) a loan."""
 
-    model_config = ConfigDict(strict=True, from_attributes=True)
+    model_config = ConfigDict(from_attributes=True)
 
     book_id: uuid.UUID
     member_id: uuid.UUID
